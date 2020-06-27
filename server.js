@@ -18,7 +18,7 @@ function mHTMLHeader() {
     "<meta name='description' content='A cool thing made with Glitch'>" +
     "<link id='favicon' rel='icon' href='' type='image/x-icon'>" +
     "<!-- import the webpage's stylesheet -->" +
-    "<link rel='stylesheet' href='https://l-pbot.glitch.me/style.css'>" +
+    "<link rel='stylesheet' href='style.css'>" +
     "</head>" +
     "<body bgcolor='#303030'>";
   return vHTML;
@@ -34,7 +34,7 @@ app.get("/", (request, response) => {
   vHTML += ""+
       //"<canvas id='canvas'></canvas>"+
       "<script src='https://cdnjs.cloudflare.com/ajax/libs/pixi.js/5.1.3/pixi.min.js'></script>"+
-      "<script src='./ClientApplication.js'></script>";
+      "<script src='ClientApplication.js'></script>";
   vHTML += mHTMLFooter();
   response.send(vHTML);
 });

@@ -12,10 +12,7 @@
   "dependencies": {
     "express": "^4.17.1",
     "better-sqlite3": "^7.0.1",
-    "typescript": "^3.9.3",
-    "pixi.js-legacy": "^5.2.4",
-    "eslint": "^7.0.0",
-    "pretty": "^2.0.0"
+    "pixi.js": "^5.2.4"
   },
   "engines": {
     "node": "12.x"
