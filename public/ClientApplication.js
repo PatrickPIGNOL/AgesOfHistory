@@ -41,7 +41,7 @@ const vTransform = {
 }
 const vOrigin = {
   cameraOriginX: 0 * GroundTexture.width/2 / vScale,
-  cameraOriginY: 2 * GroundTexture.height/2 / vScale,
+  cameraOriginY: 3 * GroundTexture.height/2 / vScale,
   homeOriginX: 0,
   homeOriginY: 23,
   homeX: 0 + application.screen.width / 2,
@@ -59,7 +59,7 @@ for (let i = 0; i < vSquare; i++)
   let Ground = new PIXI.Sprite(GroundTexture);
   vGrounds.push(Ground);
   application.stage.addChild(Ground);
-  Ground.tint = "0xCDCFBD";
+  Ground.tint = "0xCFCFBF";
   if(i === 0)
   {
     Ground.tint = "0xFF0000";
