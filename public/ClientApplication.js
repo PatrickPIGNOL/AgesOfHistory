@@ -30,30 +30,36 @@ const HomeTexture = PIXI.Texture.from(
 );
 
 let vGrounds = [];
-const vSquare = 121;
-const vScale = 10;
+let vHomes = [];
+const vSquare = 19*19;
+const vScale = 8;
 const vTransform = {
-  homeWidth: HomeTexture.width/vScale * 0.9962,
-  homeHeight: HomeTexture.height/vScale * 1.121,
+  homeWidth: HomeTexture.width/vScale * 0.996,
+  homeHeight: HomeTexture.height/vScale * 0.996,
   groundWidth: GroundTexture.width/vScale * 1.0,
   groundHeight: GroundTexture.height/vScale * 1.0,
 }
 const vOrigin = {
+  cameraOriginX: 0 * GroundTexture.width/2 / vScale,
+  cameraOriginY: 2 * GroundTexture.height/2 / vScale,
+  homeOriginX: 0,
+  homeOriginY: 23,
   homeX: 0 + application.screen.width / 2,
   homeY: 0 + HomeTexture.height / vScale / 2,
   groundX: 0 + application.screen.width / 2,
   groundY: 0 + (GroundTexture.height / vScale / 2) + (16 / vScale),
 }
+
+
 for (let i = 0; i < vSquare; i++) 
 {  
   let vX = i % Math.sqrt(vSquare);
   let vY = Math.floor(i / Math.sqrt(vSquare));
   
-
   let Ground = new PIXI.Sprite(GroundTexture);
   vGrounds.push(Ground);
   application.stage.addChild(Ground);
-  Ground.tint = "0xCFCFBB";
+  Ground.tint = "0xCDCFBD";
   if(i === 0)
   {
     Ground.tint = "0xFF0000";
@@ -72,11 +78,6 @@ for (let i = 0; i < vSquare; i++)
   }
   Ground.anchor.x = 0.5;
   Ground.anchor.y = 0.5;  
-  
-  Ground.x = (vOrigin.homeX) + (Ground.width/2 * vX) - (vY * Ground.width/2)// + vAlignment.homeX;
-  Ground.y = (vOrigin.homeY) + (Ground.height/2 * vY) + (vX * Ground.height/2)// + vAlignment.homeY;
-  
-  Grounds.put(Ground);
 }
 let vBuildings = [];
 for (let i = 0; i < vSquare; i++) 
@@ -84,16 +85,14 @@ for (let i = 0; i < vSquare; i++)
   let vX = i % Math.sqrt(vSquare);
   let vY = Math.floor(i / Math.sqrt(vSquare));
   
-  const vAlignment = {
-    homeX: (-vX * 1 / vScale) + (vY * 1 / vScale),
-    homeY: (- vX * 30 / vScale) + (- vY * 30 / vScale)// - (45 / vScale),
-  }
+  
   let Home = new PIXI.Sprite(HomeTexture);
   //application.stage.addChild(Home);
+
   if(i === 0)
   {
     vBuildings.push(Home);
-    application.stage.addChild(Home);
+    application.stage.addChild(Home);    
     Home.tint = "0x00FF00";
   }
   else if(i === Math.sqrt(vSquare)-1)
@@ -119,48 +118,60 @@ for (let i = 0; i < vSquare; i++)
     vBuildings.push(Home);
     application.stage.addChild(Home);
   }  
+  
   Home.anchor.x = 0.5;
   Home.anchor.y = 0.5;  
   Home.width = vTransform.homeWidth;
   Home.height = vTransform.homeHeight;  
-  
-  
-  Home.x = (vOrigin.homeX) + (Home.width/2 * vX) - (vY * Home.width/2) + vAlignment.homeX;
-  Home.y = (vOrigin.homeY) + (Home.height/2 * vY) + (vX * Home.height/2) + vAlignment.homeY;
 } 
 
 let Text = new PIXI.Text("",{fontFamily : 'Arial', fontSize: 24, fill : 0xFFFFFF, align : 'center'});
 Text.x = 10;
 Text.y = 50;
 application.stage.addChild(Text);
-//img.anchor.x = 0.5;
-//img.anchor.y = 0.5;
 
-//application.stage.addChild(img);
 application.ticker.add(animate);
 let delta = 0;
 function animate() {
   delta += 1;
   
-  for(let i = 0; i < vSquare; i++)
+  for(let i = 0; i < vGrounds.length; i++)
   {
     let Ground = vGrounds[i];
-    let vX = i % 3;
-    let vY = i / 3;
+    
+    let vX = i % Math.sqrt(vSquare);
+    let vY = Math.floor(i / Math.sqrt(vSquare));
+    
+    Ground.width = vTransform.groundWidth;
+    Ground.height = vTransform.groundHeight; 
+    
     const vAlignment = {
       groundX: (-vX * 3 / vScale) + (vY * 3 / vScale),
-      groundY: (- vX * 5 / vScale) + (- vY * 5 / vScale),
+      groundY: (- vX * 33 / vScale) + (- vY * 33 / vScale),
     }
-    Ground.width = vTransform.groundWidth;
-    Ground.height = vTransform.groundHeight;   
-    Ground.x = (vOrigin.groundX) + (Ground.width/2 * vX) - (vY * Ground.width/2) + vAlignment.groundX;
-    Ground.y = (vOrigin.groundY) + (Ground.height/2 * vY) + (vX * Ground.height/2) + vAlignment.groundY;  
+
+    Ground.x = (vOrigin.groundX - (vOrigin.cameraOriginX)) + (Ground.width/2 * vX) - (vY * Ground.width/2 ) + vAlignment.groundX; 
+    Ground.y = (vOrigin.groundY - (vOrigin.cameraOriginY)) + (Ground.height/2 * vY) + (vX * Ground.height/2) + vAlignment.groundY;  
+    
   }
-    
-    
+  
+  for(let i = 0; i < vBuildings.length; i++)
+  {
+    let Home = vBuildings[i];
+    let vX = 2 * i % Math.sqrt(vSquare);
+    let vY = Math.floor(2 * i / Math.sqrt(vSquare));
+    Home.width = vTransform.homeWidth;
+    Home.height = vTransform.homeHeight;  
+    const vAlignment = {
+      homeX: (-vX * 1 / vScale) + (vY * 1 / vScale),
+      homeY: (- vX * 26 / vScale) + (- vY * 26 / vScale)// - (45 / vScale),
+    }
+    Home.x = (vOrigin.homeX + (vOrigin.homeOriginX/vScale) - (vOrigin.cameraOriginX)) + (Home.width/2 * vX) - (vY * Home.width/2) + vAlignment.homeX;
+    Home.y = (vOrigin.homeY + (vOrigin.homeOriginY/vScale) - (vOrigin.cameraOriginY)) + (Home.height/2 * vY) + (vX * Home.height/2) + vAlignment.homeY;
+  }
   
   
-  Text.text = `Try google chrome if you cannot see the map`;
+  Text.text = `Try actualize page or\nGoogle Chrome if you cannot see the map`;
   
   //  img.x = application.screen.width / 2;
   //  img.y = application.screen.height / 2;
